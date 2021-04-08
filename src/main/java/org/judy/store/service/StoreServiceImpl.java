@@ -18,7 +18,7 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public StoreDTO getStore(String mid) {
 		// TODO Auto-generated method stub
-		StoreDTO dto = toDTO(mapper.getStore(mid), mapper.findByMid(mid));
+		StoreDTO dto = toDTO(mapper.getStore(mid));
 		
 		log.info("getStore........");
 		return dto;

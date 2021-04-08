@@ -16,6 +16,16 @@
   		]]>
 	</select>
 
+	<insert id="insertStore">
+		<selectKey resultType="Integer" keyProperty="sno"
+			order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		<![CDATA[
+  		insert into tbl_store (sno ,mid , sname , lat , lng , address , category,logoImg) values (#{sno} ,#{mid} , #{sname} , #{lat} , #{lng} , #{address} , #{category},#{logoImg})
+  		]]>
+	</insert>
+
 	<delete id="deleteDoc">
 		<![CDATA[
   		delete from tbl_document where muuid= #{muuid}

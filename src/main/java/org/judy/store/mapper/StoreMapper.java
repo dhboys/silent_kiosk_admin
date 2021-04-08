@@ -12,4 +12,6 @@ public interface StoreMapper {
 	public List<DocumentFile> findByMid(String mid);
 	
 	public void deleteDoc(String muuid);
+	
+	public void insertStore(Store store);
 }

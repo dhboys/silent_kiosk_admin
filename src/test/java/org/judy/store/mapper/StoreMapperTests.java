@@ -3,6 +3,7 @@ package org.judy.store.mapper;
 import org.judy.common.config.CommonConfig;
 import org.judy.manager.config.ManagerConfig;
 import org.judy.store.config.StoreConfig;
+import org.judy.store.domain.Store;
 import org.judy.time.config.TimeConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,5 +35,7 @@ public class StoreMapperTests {
 	public void testDelete() {
 		mapper.deleteDoc("08051d27-c76b-481a-a943-b406c939d270");
 	}
+	
+	
 	
 }
