@@ -47,7 +47,7 @@
 						
 
 
-						<a href="javascript:;" class="btn btn-primary btn-round">매장관리</a>
+						<a href="/admin/store/menuList?sno=10" class="btn btn-primary btn-round">매장관리</a>
 					</div>
 				</div>
 			</div>		
