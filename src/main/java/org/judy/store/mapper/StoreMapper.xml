@@ -40,6 +40,12 @@
 		]]>
 	</select>
 	
+	<select id="getOneMenu" resultType="org.judy.store.domain.Menu">
+		<![CDATA[
+		select * from tbl_store_menu where mno = #{mno}
+		]]>
+	</select>
+	
 	<insert id="insertMenu">
 		<![CDATA[
   		insert into tbl_store_menu (sno , menuName ,content , mPrice , mImg , category	) values (#{sno} ,#{menuName} , #{content} , #{mPrice} , #{mImg} , #{category})

@@ -39,4 +39,11 @@ public class StoreController {
 		
 	}
 	
+	@GetMapping("/menuModify")
+	public void getMenuModify(Integer mno , Model model) {
+		
+		model.addAttribute("menu" , storeService.getOneMenu(mno));
+		
+	}
+	
 }

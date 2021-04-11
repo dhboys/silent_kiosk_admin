@@ -42,6 +42,11 @@ public class StoreServiceTests {
 	}
 	
 	@Test
+	public void testGetOneMenu() {
+		log.info(service.getOneMenu(1)); 
+	}
+	
+	@Test
 	public void testInsertMenu() {
 		MenuDTO menuDTO = MenuDTO.builder().sno(10).menuName("생선까스").content("신메뉴").mPrice("9000").mImg("생선까스사진").category("돈까스").build();
 		service.insertMenu(menuDTO);

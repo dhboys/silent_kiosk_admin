@@ -19,6 +19,8 @@ public interface StoreMapper {
 	
 	public List<Menu> getMenu(Integer sno);
 	
+	public Menu getOneMenu(Integer mno);
+	
 	public void insertMenu(Menu menu);
 	
 	public void delMenu(Integer mno);

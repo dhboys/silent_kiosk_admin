@@ -45,6 +45,11 @@ public class StoreServiceImpl implements StoreService {
 		}).collect(Collectors.toList());
 	
 	}
+	
+	@Override
+	public MenuDTO getOneMenu(Integer mno) {
+		return toDtoMenu(mapper.getOneMenu(mno));
+	}
 
 	@Override
 	public void insertMenu(MenuDTO menuDTO) {
@@ -92,6 +97,8 @@ public class StoreServiceImpl implements StoreService {
 		mapper.updateTop(topping);
 		
 	}
+
+	
 
 	
 	

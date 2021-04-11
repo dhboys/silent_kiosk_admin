@@ -19,6 +19,8 @@ public interface StoreService {
 	// MENU
 	List<MenuDTO> getMenu(Integer sno);
 	
+	MenuDTO getOneMenu(Integer mno);
+	
 	void insertMenu(MenuDTO menuDTO);
 	
 	void delMenu(Integer mno);

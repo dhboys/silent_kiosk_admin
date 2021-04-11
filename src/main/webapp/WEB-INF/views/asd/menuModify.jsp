@@ -86,7 +86,7 @@
 				e.preventDefault()
 		const mno = e.currentTarget.getAttribute("data-mno")
 			
-		actionForm.innerHTML += "<input type='hidden' name='mno' value='"+mno+"'>"
+		actionForm.innerHTML += "<input type='hidden' value='"+mno+"'>"
 		actionForm.setAttribute("action" , "/admin/store/menuModify?mno="+mno)
 		//$(".modifyModal").modal("show")
 		actionForm.submit()

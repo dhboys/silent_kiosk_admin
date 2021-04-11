@@ -40,6 +40,11 @@ public class StoreMapperTests {
 	}
 	
 	@Test
+	public void testGetOneMenu() {
+		log.info(mapper.getOneMenu(1));
+	}
+	
+	@Test
 	public void testInsertMenu() {
 		Menu menu = Menu.builder().sno(10).menuName("냉까스").content("신메뉴").mPrice("8000").mImg("냉까스사진").category("돈까스").build();
 		mapper.insertMenu(menu);
