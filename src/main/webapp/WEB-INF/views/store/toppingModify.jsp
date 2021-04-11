@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ include file="../includes/header.jsp"%>
 
-<div class="modModal modal" tabindex="-1">
+<div class="topModal modal" tabindex="-1">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -13,12 +13,11 @@
 				<p>수정되었습니다</p>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="modCommit btn btn-primary">확인</button>
+				<button type="button" class="topCommit btn btn-primary">확인</button>
 			</div>
 		</div>
 	</div>
 </div>
-
 
 <div class="col-lg-3 col-md-6 col-sm-6">
 								<form action="/admin/store/menuModify" class="actionForm" method="post">
@@ -30,22 +29,17 @@
 											
 											<div class="form-group">
 												<label class="bmd-label-floating"></label> 
-												<input type="text" class="form-control" name='menuName' value=${menu.menuName }>
+												<input type="text" class="form-control" name='tName' value=${topping.tname }>
 											</div>
 											<div class="form-group">
 												<label class="bmd-label-floating"></label> 
-												<input type="text" class="form-control" name='content' value=${menu.content }>
+												<input type="text" class="form-control" name='tPrice' value=${topping.tprice }>
 											</div>	
 											<div class="form-group">
 												<label class="bmd-label-floating"></label> 
-												<input type="text" class="form-control" name='mprice' value=${menu.mprice }>
+												<input type="text" class="form-control" name='tImg' value=${topping.timg }>
 											</div>	
-											<div class="form-group">
-												<label class="bmd-label-floating"></label> 
-												<input type="text" class="form-control" name='mimg' value=${menu.mimg }>
-											</div>	
-											
-										
+
 										</div>
 										<div class="card-footer">
 											<div class="stats">
@@ -65,35 +59,30 @@
 	
 	
 	
-	
-// menuModify
-	
-	
 	document.querySelector(".modBtn").addEventListener("click" , function(e){
 		e.preventDefault()
 		
-		const menuName = document.querySelector("input[name='menuName']").value
-		const content = document.querySelector("input[name='content']").value
-		const mprice = document.querySelector("input[name='mprice']").value
-		const mimg = document.querySelector("input[name='mimg']").value
-		const mno = ${menu.mno}
+		const tname = document.querySelector("input[name='tName']").value
+		const tprice = document.querySelector("input[name='tPrice']").value
+		const timg = document.querySelector("input[name='tImg']").value
+		const tno = ${topping.tno}
 	
-		const menuDTO = {mno:mno , menuName:menuName , content:content , mprice : mprice , mimg:mimg , category:"일식"}
-		console.log(mprice)
-		console.log(mimg)
-		console.log(JSON.stringify(menuDTO))
-		fetch("/admin/store/menuModify" , {
+		const toppingDTO = {tno:tno , tname:tname , tprice:tprice ,  timg : timg}
+		console.log(tname)
+		console.log(tprice)
+		console.log(timg)
+		console.log(JSON.stringify(toppingDTO))
+		fetch("/admin/store/toppingModify" , {
 			method : 'post',
 			headers : {"Content-Type" : "application/json;"} ,
-			body : JSON.stringify(menuDTO)
-		}).then(res => res.text()).then(result => {$(".modModal").modal("show")})
+			body : JSON.stringify(toppingDTO)
+		}).then(res => res.text()).then(result => {$(".topModal").modal("show")})
 		
 	} , false) 
 	
-
-// menuModifyConfirm
-	document.querySelector(".modCommit").addEventListener("click" , function(e){
-		location.href = "/admin/store/menuList?sno="+${menu.sno}
+// toppingModifyConfirm
+	document.querySelector(".topCommit").addEventListener("click" , function(e){
+		location.href = "/admin/store/toppingList?sno="+${topping.sno}
 	} , false)
 	
 	</script>

@@ -77,6 +77,11 @@ public class StoreServiceImpl implements StoreService {
 			return toDtoTop(topping);
 		}).collect(Collectors.toList());
 	}
+	
+	@Override
+	public ToppingDTO getOneTopping(Integer tno) {
+		return toDtoTop(mapper.getOneTopping(tno));
+	}
 
 	@Override
 	public void insertTop(ToppingDTO toppingDTO) {
@@ -97,6 +102,8 @@ public class StoreServiceImpl implements StoreService {
 		mapper.updateTop(topping);
 		
 	}
+
+	
 
 	
 

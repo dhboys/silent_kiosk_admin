@@ -3,23 +3,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ include file="../includes/header.jsp"%>
 
-<div class="modModal modal" tabindex="-1">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title">Modal title</h5>
-			</div>
-			<div class="modal-body">
-				<p>수정되었습니다</p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="modCommit btn btn-primary">확인</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-
 <div class="col-lg-3 col-md-6 col-sm-6">
 								<form action="/admin/store/menuModify" class="actionForm" method="post">
 									<div class="card card-stats">
@@ -65,10 +48,6 @@
 	
 	
 	
-	
-// menuModify
-	
-	
 	document.querySelector(".modBtn").addEventListener("click" , function(e){
 		e.preventDefault()
 		
@@ -86,15 +65,9 @@
 			method : 'post',
 			headers : {"Content-Type" : "application/json;"} ,
 			body : JSON.stringify(menuDTO)
-		}).then(res => res.text()).then(result => {$(".modModal").modal("show")})
+		}).then(res => res.text()).then(result => console.log(result))
 		
 	} , false) 
-	
-
-// menuModifyConfirm
-	document.querySelector(".modCommit").addEventListener("click" , function(e){
-		location.href = "/admin/store/menuList?sno="+${menu.sno}
-	} , false)
 	
 	</script>
 	

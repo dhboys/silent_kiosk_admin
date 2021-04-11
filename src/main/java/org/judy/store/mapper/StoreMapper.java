@@ -19,6 +19,8 @@ public interface StoreMapper {
 	
 	public List<Menu> getMenu(Integer sno);
 	
+	public Topping getOneTopping(Integer tno);
+	
 	public Menu getOneMenu(Integer mno);
 	
 	public void insertMenu(Menu menu);

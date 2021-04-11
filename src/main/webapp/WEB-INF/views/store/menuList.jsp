@@ -47,8 +47,8 @@
 											</div>
 											<h3 class="card-title">${menu.menuName }</h3>
 											<p class="card-category">${menu.content }</p>
-											<p class="card-category">${menu.MPrice }</p>
-											<p class="card-category">${menu.MImg }</p>
+											<p class="card-category">${menu.mprice }</p>
+											<p class="card-category">${menu.mimg }</p>
 											
 										</div>
 										<div class="card-footer">

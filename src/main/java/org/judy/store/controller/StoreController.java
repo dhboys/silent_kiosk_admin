@@ -1,10 +1,16 @@
 package org.judy.store.controller;
 
 import org.judy.manager.service.ManagerService;
+import org.judy.store.dto.MenuDTO;
+import org.judy.store.dto.ToppingDTO;
 import org.judy.store.service.StoreService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.RequiredArgsConstructor;
@@ -46,4 +52,27 @@ public class StoreController {
 		
 	}
 	
+	@PostMapping("/menuModify")
+	public ResponseEntity<String> postMenuModify(@RequestBody MenuDTO menuDTO) {
+		log.info("update.............");
+		storeService.updateMenu(menuDTO);
+		
+		return new ResponseEntity<String>("success" , HttpStatus.OK);
+	}
+	
+	@GetMapping("/toppingModify")
+	public void getToppingModify(Integer tno , Model model) {
+		
+		model.addAttribute("topping" , storeService.getOneTopping(tno));
+		
+	}
+	
+	@PostMapping("/toppingModify")
+	public ResponseEntity<String> postMenuModify(@RequestBody ToppingDTO toppingDTO) {
+		log.info("update.............");
+		
+		storeService.updateTop(toppingDTO);
+		
+		return new ResponseEntity<String>("success" , HttpStatus.OK);
+	}
 }

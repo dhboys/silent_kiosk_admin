@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class MenuDTO {
 
 	private Integer mno,sno;
-	private String menuName, content, mImg, category;
-	private String mPrice;
+	private String menuName, content, mimg, category;
+	private String mprice;
 	
 }
