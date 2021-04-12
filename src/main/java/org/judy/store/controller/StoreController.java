@@ -26,15 +26,37 @@ public class StoreController {
 	
 	private final StoreService storeService;
 	
+	@GetMapping("/Sample")
+	public void sample() {
+	      
+	}
+	   
+	@PostMapping("/jusoPopup")
+	public String postJuso(){
+	   
+	   return "/store/jusoPopup";
+	}
+	   
+	@GetMapping("/jusoPopup")
+	public void juso() {
+	      
+	}
+	  
 	@GetMapping("/read")
-	public void getStore() {
+	public void getStore(String mid , Model model) {
+		model.addAttribute("store" , storeService.getStore(mid));
+		model.addAttribute("manager" , managerService.selectOne(mid));
+	}
+	
+	@GetMapping("/register")
+	public void getRegister() {
 		
 	}
 	
 	@GetMapping("/menuList")
-	public void getMenu(Integer sno, Model model) {
+	public void getMenu(Integer sno, Integer cno, Model model) {
 		
-		model.addAttribute("menu", storeService.getMenu(sno)); 
+		model.addAttribute("menu", storeService.getMenu(sno, cno));
 		
 	}
 	
@@ -60,6 +82,12 @@ public class StoreController {
 		return new ResponseEntity<String>("success" , HttpStatus.OK);
 	}
 	
+	@PostMapping("/menuDelete")
+	   public ResponseEntity<String> postMenuDelete(@RequestBody Integer mno){
+	      storeService.delMenu(mno);
+	      return new ResponseEntity<String>("success" , HttpStatus.OK);
+	   }
+	
 	@GetMapping("/toppingModify")
 	public void getToppingModify(Integer tno , Model model) {
 		
@@ -68,11 +96,17 @@ public class StoreController {
 	}
 	
 	@PostMapping("/toppingModify")
-	public ResponseEntity<String> postMenuModify(@RequestBody ToppingDTO toppingDTO) {
+	public ResponseEntity<String> postTopModify(@RequestBody ToppingDTO toppingDTO) {
 		log.info("update.............");
 		
 		storeService.updateTop(toppingDTO);
 		
 		return new ResponseEntity<String>("success" , HttpStatus.OK);
 	}
+	
+	@PostMapping("/toppingDelete")
+	   public ResponseEntity<String> postTopDelete(@RequestBody Integer tno){
+	      storeService.delTop(tno);
+	      return new ResponseEntity<String>("success" , HttpStatus.OK);
+	   }
 }

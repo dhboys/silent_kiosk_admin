@@ -17,7 +17,7 @@ public interface StoreService {
 	void deleteDoc(String muuid);
 	
 	// MENU
-	List<MenuDTO> getMenu(Integer sno);
+	List<MenuDTO> getMenu(Integer sno, Integer cno);
 	
 	MenuDTO getOneMenu(Integer mno);
 	
@@ -41,6 +41,7 @@ public interface StoreService {
 	default StoreDTO toDTO(Store store) {
 		StoreDTO dto = StoreDTO.builder()
 								.mid(store.getMid())
+								.sno(store.getSno())
 								.sname(store.getSname())
 								.lat(store.getLat())
 								.lng(store.getLng())
@@ -56,6 +57,7 @@ public interface StoreService {
 	default Store toDomain(StoreDTO dto) {
 		Store store = Store.builder()
 				.mid(dto.getMid())
+				.sno(dto.getSno())
 				.sname(dto.getSname())
 				.lat(dto.getLat())
 				.lng(dto.getLng())

@@ -9,58 +9,85 @@
 			<div class="modal-header">
 				<h5 class="modal-title">Modal title</h5>
 			</div>
+			<form action="/admin/store/menuModify" class="actionForm" method="post">
 			<div class="modal-body">
-				<p>수정되었습니다</p>
+				<div class="card card-stats">
+					<div class="card-header card-header-warning card-header-icon">
+						<div class="card-icon">
+							<i class="material-icons">content_copy</i>
+						</div>
+
+						<div class="form-group">
+							<label class="bmd-label-floating"></label> <input type="text"
+								class="form-control" name='menuName' value=${menu.menuName }>
+						</div>
+						<div class="form-group">
+							<label class="bmd-label-floating"></label> <input type="text"
+								class="form-control" name='content' value=${menu.content }>
+						</div>
+						<div class="form-group">
+							<label class="bmd-label-floating"></label> <input type="text"
+								class="form-control" name='mprice' value=${menu.mprice }>
+						</div>
+						<div class="form-group">
+							<label class="bmd-label-floating"></label> <input type="text"
+								class="form-control" name='mimg' value=${menu.mimg }>
+						</div>
+					</div>
+					
+				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="modCommit btn btn-primary">확인</button>
 			</div>
+			</form>
 		</div>
 	</div>
 </div>
 
 
 <div class="col-lg-3 col-md-6 col-sm-6">
-								<form action="/admin/store/menuModify" class="actionForm" method="post">
-									<div class="card card-stats">
-										<div class="card-header card-header-warning card-header-icon">
-											<div class="card-icon">
-												<i class="material-icons">content_copy</i>
-											</div>
-											
-											<div class="form-group">
-												<label class="bmd-label-floating"></label> 
-												<input type="text" class="form-control" name='menuName' value=${menu.menuName }>
-											</div>
-											<div class="form-group">
-												<label class="bmd-label-floating"></label> 
-												<input type="text" class="form-control" name='content' value=${menu.content }>
-											</div>	
-											<div class="form-group">
-												<label class="bmd-label-floating"></label> 
-												<input type="text" class="form-control" name='mprice' value=${menu.mprice }>
-											</div>	
-											<div class="form-group">
-												<label class="bmd-label-floating"></label> 
-												<input type="text" class="form-control" name='mimg' value=${menu.mimg }>
-											</div>	
-											
-										
-										</div>
-										<div class="card-footer">
-											<div class="stats">
-												<button type="submit" class="modBtn btn btn-primary pull-right" style ="padding: 5px;">수정</button>
-											</div>
-										</div>
-									</div>
-							  </form>
-								</div> 
+	<form action="/admin/store/menuModify" class="actionForm" method="post">
+		<div class="card card-stats">
+			<div class="card-header card-header-warning card-header-icon">
+				<div class="card-icon">
+					<i class="material-icons">content_copy</i>
+				</div>
+
+				<div class="form-group">
+					<label class="bmd-label-floating"></label> <input type="text"
+						class="form-control" name='menuName' value=${menu.menuName }>
+				</div>
+				<div class="form-group">
+					<label class="bmd-label-floating"></label> <input type="text"
+						class="form-control" name='content' value=${menu.content }>
+				</div>
+				<div class="form-group">
+					<label class="bmd-label-floating"></label> <input type="text"
+						class="form-control" name='mprice' value=${menu.mprice }>
+				</div>
+				<div class="form-group">
+					<label class="bmd-label-floating"></label> <input type="text"
+						class="form-control" name='mimg' value=${menu.mimg }>
+				</div>
+
+
+			</div>
+			<div class="card-footer">
+				<div class="stats">
+					<button type="submit" class="modBtn btn btn-primary pull-right"
+						style="padding: 5px;">수정</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
 
 
 
-	<script type="text/javascript" src="../resources/service.js"></script>
-	
-	<script>
+<script type="text/javascript" src="../resources/service.js"></script>
+
+<script>
 	
 	
 	
@@ -97,7 +124,7 @@
 	} , false)
 	
 	</script>
-	
 
 
-	<%@ include file="../includes/footer.jsp"%>
+
+<%@ include file="../includes/footer.jsp"%>
