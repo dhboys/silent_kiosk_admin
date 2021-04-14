@@ -106,7 +106,7 @@ public class ManagerController {
 	public void getRead(String mid,  Model model) {
 		
 		ManagerDTO managerDTO = managerService.selectOne(mid);
-		StoreDTO storeDTO = storeService.getStore(mid);
+		List<StoreDTO> storeDTO = storeService.getStore(mid);
 		
 		log.info("getList...............");
 		
@@ -158,6 +158,13 @@ public class ManagerController {
 		managerService.registerMan(dto);
 		
 		return new ResponseEntity<String>("Success" , HttpStatus.OK);
+	}
+	@PostMapping("/modifyMan")
+	public ResponseEntity<String> postModify(@RequestBody ManagerDTO managerDTO){
+		
+		managerService.updateMan(managerDTO);
+		
+		return new ResponseEntity<String>("success" , HttpStatus.OK);
 	}
 	
 	
