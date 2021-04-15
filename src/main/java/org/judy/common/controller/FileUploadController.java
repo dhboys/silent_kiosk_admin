@@ -334,6 +334,92 @@ public class FileUploadController {
 		return new ResponseEntity<String>("success", HttpStatus.OK);
 
 	}
+	
+	// storeUpload
+	@PostMapping("/store/upload")
+	   public ResponseEntity<List<ManagerFileDTO>> storeUpload(MultipartFile[] uploadFile) {
+
+	      String path = "C:\\upload\\temp\\admin\\manager";
+
+	      log.info("upload------------------");
+
+	      List<ManagerFileDTO> fileList = new ArrayList<>();
+
+	      for (MultipartFile multipartFile : uploadFile) {
+
+	         log.info("---------------------------");
+	         log.info("upload file name: " + multipartFile.getOriginalFilename());
+	         log.info("upload file size: " + multipartFile.getSize());
+
+	         String folderPath = getFolder();
+
+	         File uploadPath = new File(path, folderPath);
+
+	         if (uploadPath.exists() == false) {
+
+	            uploadPath.mkdirs();
+	         }
+
+	         UUID uuid = UUID.randomUUID();
+
+	         String fileName = multipartFile.getOriginalFilename();
+
+	         File saveFile = new File(uploadPath, uuid.toString() + "_" + fileName);
+
+	         log.info(saveFile);
+	         boolean isImage = multipartFile.getContentType().startsWith("image");
+
+	         try {
+
+	            
+	               File sFile = new File(uploadPath, "s_" + uuid.toString() + "_" + fileName);
+	               FileOutputStream fos = new FileOutputStream(sFile);
+	               Thumbnailator.createThumbnail(multipartFile.getInputStream(), fos, 100, 100);
+
+	            
+	            ManagerFileDTO managerFile = new ManagerFileDTO(folderPath, uuid.toString(), fileName, isImage);
+
+	            fileList.add(managerFile);
+
+	            multipartFile.transferTo(saveFile);
+	         } catch (Exception e) {
+	            e.printStackTrace();
+	         }
+
+	      } // end for
+
+	      return new ResponseEntity<>(fileList, HttpStatus.OK);
+	   }
+	
+	// storeView
+	@GetMapping("/store/view")
+	   @ResponseBody
+	   public ResponseEntity<byte[]> getStoreView(String link) {
+
+		   log.info("view.....................");
+		   log.info("Link:" + link);
+		   
+	      String path = "C:\\upload\\temp\\admin\\manager";
+
+	      ResponseEntity<byte[]> result = null;
+
+	      try {
+	         File targetFile = encoding(link,path);
+	         
+	         HttpHeaders header = new HttpHeaders();
+
+	         header.add("Content-Type", Files.probeContentType(targetFile.toPath()));
+
+	         result = new ResponseEntity<byte[]>(FileCopyUtils.copyToByteArray(targetFile), header, HttpStatus.OK);
+
+	      } catch (Exception e) {
+	         e.printStackTrace();
+	      }
+
+	      return result;
+	   }
+	
+	
 
 	// ====================================================================================================================
 	// notice

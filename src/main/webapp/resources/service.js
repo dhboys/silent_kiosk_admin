@@ -80,8 +80,16 @@ var service = (function() {
 			body : JSON.stringify(obj)
 		}).then(res => res.text())
 	}   
+	
+	function storeUpload(formdata){
+	
+		return fetch("/admin/common/store/upload",{
+				method : 'post',
+				body : formdata
+		}).then(res => res.json())
+	}
        
        
-        return {deleteNotice:deleteNotice, register:register, upload:upload , modify:modify, fileDelete:fileDelete, getFiles:getFiles,sendUpload:sendUpload, sendUploadThumb:sendUploadThumb , sendRegister:sendRegister}
+        return {storeUpload:storeUpload, deleteNotice:deleteNotice, register:register, upload:upload , modify:modify, fileDelete:fileDelete, getFiles:getFiles,sendUpload:sendUpload, sendUploadThumb:sendUploadThumb , sendRegister:sendRegister}
 
     }())

@@ -4,6 +4,7 @@ import org.judy.common.config.CommonConfig;
 import org.judy.manager.config.ManagerConfig;
 import org.judy.store.config.StoreConfig;
 import org.judy.store.domain.Menu;
+import org.judy.store.domain.MenuTopping;
 import org.judy.store.domain.Topping;
 import org.judy.time.config.TimeConfig;
 import org.junit.Test;
@@ -91,5 +92,22 @@ public class StoreMapperTests {
 	public void testUpdateTop() {
 		Topping topping = Topping.builder().tno(14).tname("오뎅국물").tprice("100").timg("오뎅사진").build();
 		mapper.updateTop(topping);
+	}
+	
+	@Test
+	public void testSelectedTop() {
+		log.info(mapper.selectedTop(19));
+	}
+	
+	@Test
+	public void testExceptTop() {
+		MenuTopping menuTop = MenuTopping.builder().mno(19).tno(16).build();
+		mapper.exceptTop(menuTop);
+	}
+	
+	@Test
+	public void testUnselectTop() {
+		Menu menu = Menu.builder().sno(13).mno(31).build();
+		log.info(mapper.unSelectTop(menu));
 	}
 }

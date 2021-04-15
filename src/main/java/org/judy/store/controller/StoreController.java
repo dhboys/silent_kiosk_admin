@@ -7,9 +7,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.judy.manager.service.ManagerService;
 import org.judy.store.dto.MenuDTO;
+import org.judy.store.dto.MenuToppingDTO;
 import org.judy.store.dto.StoreDTO;
 import org.judy.store.dto.ToppingDTO;
 import org.judy.store.service.StoreService;
@@ -122,8 +124,7 @@ public class StoreController {
 	public void getMenu(Integer sno, Integer cno, Model model) {
 		
 		model.addAttribute("menu", storeService.getMenu(sno, cno));
-		model.addAttribute("sname", storeService.menuSname(sno));
-		
+		model.addAttribute("sname", storeService.menuSname(sno));	
 	}
 	
 	
@@ -237,6 +238,35 @@ public class StoreController {
 	      storeService.delTop(tno);
 	      return new ResponseEntity<String>("success" , HttpStatus.OK);
 	   }
+	
+	@GetMapping("/selectedTop")
+	public ResponseEntity<List<ToppingDTO>> getSelectedTop(Integer mno){
+		
+		return new ResponseEntity<List<ToppingDTO>>(storeService.selectedTop(mno) , HttpStatus.OK);
+	}
+	
+	@GetMapping("/unSelectTop")
+	public ResponseEntity<List<ToppingDTO>> getUnSelectTop(Integer mno, Integer sno){
+		MenuDTO menuDTO = MenuDTO.builder().sno(sno).mno(mno).build();
+		
+		return new ResponseEntity<List<ToppingDTO>>(storeService.unSelectTop(menuDTO) , HttpStatus.OK);
+	}
+	
+	@PostMapping("/exceptTopping")
+	public ResponseEntity<String> postExceptTop(@RequestBody MenuToppingDTO menuToppingDTO){
+		
+		storeService.exceptTop(menuToppingDTO);
+		
+		return new ResponseEntity<String>("success" , HttpStatus.OK);
+	}
+	
+	@PostMapping("/addTopping")
+	public ResponseEntity<String> postAddTop(@RequestBody MenuToppingDTO menuToppingDTO){
+		
+		storeService.addTop(menuToppingDTO);
+		
+		return new ResponseEntity<String>("success" , HttpStatus.OK);
+	}
 	
 	
 	private String getFolder() {

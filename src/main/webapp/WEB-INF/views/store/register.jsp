@@ -90,7 +90,23 @@
 								</div>
 							</div>
 						</div>
-						<a class="regBtn btn btn-primary btn-round">등록</a>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group bmd-form-group is-focused">
+									<label class="bmd-label-floating">매장이미지</label>
+
+								</div>
+								<div style="margin-bottom: 10px">
+									<input type="file" name="storeImg" class="form-control" id="inputGroupFile02" multiple="multiple"/>
+								</div>
+								<div class="fileThumb"></div>
+							</div>
+						</div>
+						<div class="row storeThumb">
+							
+						</div>
+						
+						<a href="" class="regBtn btn btn-primary btn-round">등록</a>
 						</form>
 					</div>
 				</div>
@@ -104,7 +120,7 @@
 
 const mid = document.querySelector("input[name='mid']").value
 
-//fileUpload
+//fileUploadLogoImg
 document.querySelector("input[name='logoImg']").addEventListener("change" , function(e){
 
 	  	e.preventDefault()
@@ -120,9 +136,49 @@ document.querySelector("input[name='logoImg']").addEventListener("change" , func
 	    service.sendUploadThumb(fd)
 	   
 } , false)
-	
-	 
 
+// fileUploadStoreImgView
+		document.querySelector("input[name='storeImg']").addEventListener("change", function(e){
+		
+		e.preventDefault()
+		
+		const formdata = new FormData()
+		
+		const files = document.querySelector("input[name='storeImg']").files
+		
+		console.log(files)
+		
+		const storeThumb = document.querySelector(".storeThumb")
+		
+		for(var i = 0; i < files.length ; i++){
+			
+			formdata.append("uploadFile", files[i])
+			
+		}
+		
+		service.storeUpload(formdata).then(jsonObj => 
+		
+		 { console.log(jsonObj)
+			for(var i = 0 ; i< jsonObj.length; i++){
+			
+			var file = jsonObj[i];
+				
+			storeThumb.innerHTML += "<div class='col-md-2 delFile"+file.uuid+"'> <ul><li id='li"+file.uuid+"' data-uuid='"+file.uuid+"' data-fileName='"+file.fileName+"' data-uploadPath='"+file.uploadPath+"' data-image='"+file.image+"'>"+file.fileName+"<img src='/admin/common/store/view?link="+file.thumbLink+"'/><button onclick='delTempImg(event,"+JSON.stringify(file)+")'>삭제</button></li></ul> </div>"
+
+		}})
+		
+	}, false)
+	
+	// tempDelete
+	function delTempImg(event, file){
+		
+		event.preventDefault()
+		
+		const fileLi = document.querySelector(".delFile"+file.uuid)
+		
+		fileLi.remove()
+	}
+	
 
 	// registerPost
 	 document.querySelector(".regBtn").addEventListener("click" , function(e) {

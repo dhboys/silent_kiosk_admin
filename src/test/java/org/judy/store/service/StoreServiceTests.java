@@ -5,6 +5,7 @@ import org.judy.manager.config.ManagerConfig;
 import org.judy.store.config.StoreConfig;
 import org.judy.store.domain.Topping;
 import org.judy.store.dto.MenuDTO;
+import org.judy.store.dto.MenuToppingDTO;
 import org.judy.store.dto.StoreDTO;
 import org.judy.store.dto.ToppingDTO;
 import org.judy.time.config.TimeConfig;
@@ -96,5 +97,22 @@ public class StoreServiceTests {
 	public void testUpdateTopping() {
 		ToppingDTO toppingDTO = ToppingDTO.builder().tno(14).tname("짬뽕국물").tprice("10000").timg("짬뽕사진").build();
 		service.updateTop(toppingDTO);
+	}
+	
+	@Test
+	public void testSelectedTop() {
+		log.info(service.selectedTop(19));
+	}
+	
+	@Test
+	public void testExceptTop() {
+		MenuToppingDTO dto = MenuToppingDTO.builder().mno(19).tno(16).build();
+		service.exceptTop(dto);
+	}
+	
+	@Test
+	public void testUnSelectTop() {
+		MenuDTO dto = MenuDTO.builder().mno(31).sno(13).build();
+		log.info(service.unSelectTop(dto));
 	}
 }
