@@ -1,9 +1,12 @@
 package org.judy.store.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.judy.common.config.CommonConfig;
+import org.judy.common.util.ManagerFileDTO;
 import org.judy.manager.config.ManagerConfig;
 import org.judy.store.config.StoreConfig;
-import org.judy.store.domain.Topping;
 import org.judy.store.dto.MenuDTO;
 import org.judy.store.dto.MenuToppingDTO;
 import org.judy.store.dto.StoreDTO;
@@ -114,5 +117,10 @@ public class StoreServiceTests {
 	public void testUnSelectTop() {
 		MenuDTO dto = MenuDTO.builder().mno(31).sno(13).build();
 		log.info(service.unSelectTop(dto));
+	}
+	
+	@Test
+	public void testGetStoreImg() {
+		log.info(service.getStoreImg(36));
 	}
 }

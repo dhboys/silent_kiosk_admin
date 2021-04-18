@@ -3,7 +3,12 @@ package org.judy.store.dto;
 import java.sql.Date;
 import java.util.List;
 
-import org.judy.store.domain.DocumentFile;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.judy.common.util.ManagerFileDTO;
+import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -18,7 +23,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class StoreDTO {
 
-	private String mid,sname;
+	private String mid;
+	@NotBlank(message = "not blank")
+	private String sname;
 	private Integer sno;
 	private double lat,lng;
 	private String address,category;
@@ -27,4 +34,6 @@ public class StoreDTO {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private Date regdate, updatedate;
 	
+	@NotEmpty(message = "not Empty")
+	private List<ManagerFileDTO> fileDTO;
 }

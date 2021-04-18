@@ -110,4 +110,9 @@ public class StoreMapperTests {
 		Menu menu = Menu.builder().sno(13).mno(31).build();
 		log.info(mapper.unSelectTop(menu));
 	}
+	
+	@Test
+	public void testGetStoreImg() {
+		log.info(mapper.getStoreImage(34));
+	}
 }

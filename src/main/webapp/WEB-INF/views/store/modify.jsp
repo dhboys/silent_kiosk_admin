@@ -27,8 +27,8 @@
 			<div class="col-md-12">
 				<div class="card card-profile">
 					<div class="card-avatar">
-						<a href="javascript:;"> <img class="img modal-img imgLogo" style = "width: 130px; height: 130px;"
-							src="../resources/assets/img/photo.jpg" />
+						<a href="javascript:;"> <img class="imgLogo modal-img" style="width: 130px; height: 130px"
+							src="/admin/common/logo/view?link=${store.sno }/${store.logoImg}" />
 						</a>
 					</div>
 					<div class="card-body" style="text-align: left;">
@@ -64,7 +64,7 @@
 
 								</div>
 								<div style="margin-bottom: 10px">
-									<input type="file" name="logoImg" class="form-control" id="inputGroupFile02"/>
+									<input type="file" name="logoImg" class="form-control" data-fileName="${store.logoImg }" id="inputGroupFile02"/>
 								</div>
 								<div class="fileThumb"></div>
 							</div>
@@ -93,10 +93,34 @@
 						
 						<div class="col-md-6">
 								<div class="form-group">
-									<label class="bmd-label-floating">MID</label> <input
-										type="hidden" class="form-control" name='sno' value="${store.sno}" readonly="readonly"/>
+								<input type="hidden" class="form-control" name='sno' value="${store.sno}" readonly="readonly"/>
 								</div>
 							</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group bmd-form-group is-focused">
+									<label class="bmd-label-floating">매장이미지</label>
+
+								</div>
+								<div style="margin-bottom: 10px">
+									<input type="file" name="storeImg" class="form-control" id="inputGroupFile02"  multiple="multiple"/>
+								</div>
+								<div class="fileThumb"></div>
+							</div>
+						</div>
+						<div class="row storeThumb">
+						<c:forEach items="${storeImg }" var="file">
+							<div class='col-md-2 delFile${file.suuid}'>
+							 <ul>
+								 <li id='li${file.suuid}' data-suuid='${file.suuid}' data-sfileName='${file.sfileName}' data-suploadPath='${file.suploadPath}'>${file.sfileName}
+									 <img src='/admin/common/store/Imgview?link=${store.sno}/s_${file.suuid}_${file.sfileName}'/>
+										 <button class='btn btn-round btn-danger' style = 'padding: 5px;' onclick='delTempImg(event, "${file.suuid}")'>삭제</button>
+								 </li>
+							 </ul>
+							  </div>
+						</c:forEach>	  
+						</div>
+							
 						<a class="regBtn btn btn-primary btn-round">등록</a>
 						</form>
 					</div>
@@ -110,6 +134,14 @@
 <script>
 
 const mid = document.querySelector("input[name='mid']").value
+const arr = []
+const InsertArr = []
+
+
+
+// delete
+
+
 
 //fileUpload
 document.querySelector("input[name='logoImg']").addEventListener("change" , function(e){
@@ -121,14 +153,60 @@ document.querySelector("input[name='logoImg']").addEventListener("change" , func
 	    fd.append("value", e.target.name)
 	    service.sendUpload(fd).then(result => {
 	    	console.dir(result[0])
-	    	e.target.setAttribute("data-fileName" , result[0].fileName)
+	    	e.target.setAttribute("data-fileName" , result[0].sfileName)
 	    }) 
 	    
 	    service.sendUploadThumb(fd)
 	   
 } , false)
 	
-	 
+// fileUploadStoreImgView
+		document.querySelector("input[name='storeImg']").addEventListener("change", function(e){
+		
+		e.preventDefault()
+		
+		const formdata = new FormData()
+		
+		const files = document.querySelector("input[name='storeImg']").files
+		
+		console.log(files)
+		
+		const storeThumb = document.querySelector(".storeThumb")
+		
+		for(var i = 0; i < files.length ; i++){
+			
+			formdata.append("uploadFile", files[i])
+			
+		}
+		
+		service.storeUpload(formdata).then(jsonObj => 
+		
+		 { console.log(jsonObj)
+			for(var i = 0 ; i< jsonObj.length; i++){
+			
+			var file = jsonObj[i];
+				
+			storeThumb.innerHTML += "<div class='col-md-2 delFile"+file.suuid+"'> <ul><li id='li"+file.suuid+"' data-suuid='"+file.suuid+"' data-sfileName='"+file.sfileName+"' data-suploadPath='"+file.suploadPath+"'>"+file.sfileName+"<img src='/admin/common/store/view?link="+file.thumbLink+"'/><button class='btn btn-round btn-danger' style = 'padding: 5px;' onclick='delTempImg(event,"+JSON.stringify(file)+")'>삭제</button></li></ul> </div>"
+
+		}})
+		
+	}, false)
+	
+	// tempDelete
+	function delTempImg(event, file){
+		
+		event.preventDefault()
+		console.dir(arr)
+		console.log(file)
+		const fileLi = document.querySelector(".delFile"+file)
+		
+		fileLi.remove()
+		
+		console.dir(arr)
+
+		
+	}
+	
 
 
 	// modifyPost
@@ -137,13 +215,19 @@ document.querySelector("input[name='logoImg']").addEventListener("change" , func
 	 const obj = {}
 	 const form = document.querySelector(".regStore")
 	 const input = document.querySelectorAll(".regStore input")
+
+	document.querySelectorAll(".storeThumb li").forEach(e =>{
+		const obj = {sfileName:e.dataset.sfilename , suuid:e.dataset.suuid , suploadPath : e.dataset.suploadpath}
+		
+		arr.push(obj)
+	})
 	
 	 for (let i of input.length) {
 	 obj[form.elements[i].name] = form.elements[i].value
 	 }
 	 obj.logoImg = document.querySelector("input[name='logoImg']").dataset.filename
 	 console.log(obj)
-	
+	 obj.fileDTO = arr
 	
 	 service.sendRegister(obj, "/admin/store/modify").then(result => {$(".regModal").modal("show")}) 
 	

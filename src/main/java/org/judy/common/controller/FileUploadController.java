@@ -150,6 +150,14 @@ public class FileUploadController {
 		
 		return imgView(link, path);
 	}
+	
+	@GetMapping("/store/Imgview")
+	public ResponseEntity<byte[]> storeView(String link) {
+		log.info("link: "+link);
+		String path = "C:\\upload\\admin\\manager\\storeImg\\";
+		
+		return imgView(link, path);
+	}
 
 	@PostMapping(value = "/manager/upload", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<List<ManagerFileDTO>> postUpload(MultipartFile[] files) {
@@ -181,8 +189,8 @@ public class FileUploadController {
 
 			File saveFile = new File(uploadPath, fileName);
 
-			ManagerFileDTO fileDTO = ManagerFileDTO.builder().fileName(multipartFile.getOriginalFilename())
-					.uploadPath(savePath).uuid(uuid.toString()).build();
+			ManagerFileDTO fileDTO = ManagerFileDTO.builder().sfileName(multipartFile.getOriginalFilename())
+					.suploadPath(savePath).suuid(uuid.toString()).build();
 
 			try {
 				multipartFile.transferTo(saveFile);
@@ -240,8 +248,8 @@ public class FileUploadController {
 
 			File saveFile = new File(uploadPath, fileName);
 
-			ManagerFileDTO fileDTO = ManagerFileDTO.builder().fileName(fileName)
-					.uploadPath(savePath).uuid(uuid.toString()).image(isImage).build();
+			ManagerFileDTO fileDTO = ManagerFileDTO.builder().sfileName(fileName)
+					.suploadPath(savePath).suuid(uuid.toString()).build();
 
 			try {
 				multipartFile.transferTo(saveFile);
@@ -367,17 +375,16 @@ public class FileUploadController {
 	         File saveFile = new File(uploadPath, uuid.toString() + "_" + fileName);
 
 	         log.info(saveFile);
-	         boolean isImage = multipartFile.getContentType().startsWith("image");
+	         //boolean isImage = multipartFile.getContentType().startsWith("image");
 
 	         try {
-
-	            
+   
 	               File sFile = new File(uploadPath, "s_" + uuid.toString() + "_" + fileName);
 	               FileOutputStream fos = new FileOutputStream(sFile);
 	               Thumbnailator.createThumbnail(multipartFile.getInputStream(), fos, 100, 100);
 
 	            
-	            ManagerFileDTO managerFile = new ManagerFileDTO(folderPath, uuid.toString(), fileName, isImage);
+	            ManagerFileDTO managerFile = ManagerFileDTO.builder().suploadPath(folderPath).suuid(uuid.toString()).sfileName(fileName).build();  		
 
 	            fileList.add(managerFile);
 
