@@ -121,7 +121,7 @@
 						</c:forEach>	  
 						</div>
 							
-						<a class="regBtn btn btn-primary btn-round">등록</a>
+						<a href='' class="regBtn btn btn-primary btn-round">수정</a>
 						</form>
 					</div>
 				</div>
@@ -144,6 +144,8 @@ const InsertArr = []
 
 
 //fileUpload
+const csrfTokenValue = "${_csrf.token}"
+
 document.querySelector("input[name='logoImg']").addEventListener("change" , function(e){
 
 	  	e.preventDefault()
@@ -151,12 +153,14 @@ document.querySelector("input[name='logoImg']").addEventListener("change" , func
 	    const files = e.target.files
 	    fd.append("files", files[0])
 	    fd.append("value", e.target.name)
-	    service.sendUpload(fd).then(result => {
+	    console.log(fd)
+	    console.log(csrfTokenValue);
+	    service.sendUpload(fd, csrfTokenValue).then(result => {
 	    	console.dir(result[0])
 	    	e.target.setAttribute("data-fileName" , result[0].sfileName)
 	    }) 
 	    
-	    service.sendUploadThumb(fd)
+	    service.sendUploadThumb(fd, csrfTokenValue)
 	   
 } , false)
 	
@@ -179,7 +183,7 @@ document.querySelector("input[name='logoImg']").addEventListener("change" , func
 			
 		}
 		
-		service.storeUpload(formdata).then(jsonObj => 
+		service.storeUpload(formdata, csrfTokenValue).then(jsonObj => 
 		
 		 { console.log(jsonObj)
 			for(var i = 0 ; i< jsonObj.length; i++){
@@ -198,7 +202,7 @@ document.querySelector("input[name='logoImg']").addEventListener("change" , func
 		event.preventDefault()
 		console.dir(arr)
 		console.log(file)
-		const fileLi = document.querySelector(".delFile"+file)
+		const fileLi = document.querySelector(".delFile"+file.suuid)
 		
 		fileLi.remove()
 		
@@ -229,7 +233,7 @@ document.querySelector("input[name='logoImg']").addEventListener("change" , func
 	 console.log(obj)
 	 obj.fileDTO = arr
 	
-	 service.sendRegister(obj, "/admin/store/modify").then(result => {$(".regModal").modal("show")}) 
+	 service.sendRegister(obj, "/admin/store/modify", csrfTokenValue).then(result => {$(".regModal").modal("show")}) 
 	
 	 } , false) 
 

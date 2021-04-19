@@ -159,7 +159,7 @@ String sno = request.getParameter("sno");
 					<div class="cardHeaderStyle card-header card-header-primary">
 						<div>
 							<h4 class="card-title ">${sname }</h4>
-							<p class="card-category">Here is a subtitle for this table</p>
+							<p class="card-category"></p>
 						</div>
 					</div>
 
@@ -188,7 +188,7 @@ String sno = request.getParameter("sno");
 											<h5 class="menuName card-title">${menu.menuName }</h5>
 											<p class="menuContent card-category">${menu.content }</p>
 											<p class="menuPrice card-category">${menu.mprice }</p>
-											<p class="menuImg card-category">${menu.mimg }</p>
+											<input class="menuImg" type="hidden" value="${menu.mimg }"/>
 
 										</div>
 										<div class="card-footer">
@@ -250,6 +250,7 @@ String sno = request.getParameter("sno");
 	const actionForm2 = document.querySelector(".actionForm2")
     const cnoAct = document.querySelector("input[name='cno']").value
     const sno = document.querySelector("input[name='sno']").value
+    const csrfTokenValue = "${_csrf.token}"
     //category
         window.onload = function(){
 
@@ -291,11 +292,11 @@ document.querySelector("input[name='mimg']").addEventListener("change" , functio
 	    const files = e.target.files
 	    fd.append("files", files[0])
 	    fd.append("value", e.target.name)
-	    service.sendUpload(fd).then(result => {
+	    service.sendUpload(fd,csrfTokenValue).then(result => {
 	    	console.dir(result[0])
-	    	e.target.setAttribute("data-fileName" , result[0].fileName)
+	    	e.target.setAttribute("data-fileName" , result[0].sfileName)
 	    }) 
-	    service.sendUploadThumb(fd)
+	    service.sendUploadThumb(fd,csrfTokenValue)
 	    
 	   
 	   
@@ -326,7 +327,7 @@ document.querySelector("input[name='mimg']").addEventListener("change" , functio
 			const menuName = e.currentTarget.querySelector(".menuName").innerHTML
 			const content = e.currentTarget.querySelector(".menuContent").innerHTML
 			const mprice = e.currentTarget.querySelector(".menuPrice").innerHTML
-			const mimg = e.currentTarget.querySelector(".menuImg").innerHTML
+			const mimg = e.currentTarget.querySelector(".menuImg").value
 			
 			if(e.target == e.currentTarget.querySelector(".modBtn")){
 				
@@ -347,12 +348,8 @@ document.querySelector("input[name='mimg']").addEventListener("change" , functio
 				$(".delModal").modal("show")
 				
 				document.querySelector(".delAgree").addEventListener("click" , function(e){
-            
-            fetch("/admin/store/menuDelete" , {
-               method : 'post' , 
-               headers : {"Content-Type" : "application/json"} ,
-               body : JSON.stringify(mno)
-            }).then(res => res.text()).then(result => {
+            const path = "/admin/store/menuDelete"
+            service.sendRegister(mno,path, csrfTokenValue).then(result => {
             	$(".delModal").modal("hide")
             	$(".delModalCon").modal("show")
                console.log("삭제")
@@ -360,15 +357,16 @@ document.querySelector("input[name='mimg']").addEventListener("change" , functio
 			})
 			} else if(e.target == e.currentTarget.querySelector(".topBtn")){
 				document.querySelector("input[name='mnoModal']").value = mno
-				fetch("/admin/store/selectedTop?mno="+ mno , {
-					method : 'get'
-				}).then(res => res.json()).then(result => result.forEach(topping => {
+				
+				const path1 = "/admin/store/selectedTop?mno="+ mno
+				
+				service.getAjax(path1).then(res => res.json()).then(result => result.forEach(topping => {
 					document.querySelector(".select-topping").innerHTML += "<a href='' class='btn btn-round btn-primary' data-tno="+topping.tno+">"+topping.tname+"</a>"
 				}))
 				
-				fetch("/admin/store/unSelectTop?mno="+ mno+"&sno="+sno , {
-					method : 'get'
-				}).then(res => res.json()).then(result => result.forEach(topping => {
+				const path2 = "/admin/store/unSelectTop?mno="+ mno+"&sno="+sno
+				
+				service.getAjax(path2).then(res => res.json()).then(result => result.forEach(topping => {
 					document.querySelector(".unSelect-topping").innerHTML += "<a href='' class='btn btn-round' data-tno="+topping.tno+">"+topping.tname+"</a>"
 				}))
 				
@@ -395,12 +393,9 @@ document.querySelector("input[name='mimg']").addEventListener("change" , functio
 		const mno = document.querySelector("input[name='mnoModal']").value
 		const tname = e.target.innerText
 		const value = {mno:mno, tno:tno} 
+		const path = "/admin/store/exceptTopping"
 		
-		fetch("/admin/store/exceptTopping", {
-			method : 'post',
-			headers : {"Content-Type" : "application/json"},
-			body : JSON.stringify(value)
-		}).then(res => res.text()).then(result => console.log(result))
+		service.sendRegister(value,path,csrfTokenValue).then(result => console.log(result))
 		
 		e.target.remove()
 		document.querySelector(".unSelect-topping").innerHTML += "<a href='' class='btn btn-round' data-tno="+tno+">"+tname+"</a>"
@@ -416,11 +411,9 @@ document.querySelector("input[name='mimg']").addEventListener("change" , functio
 		
 		const value = {mno:mno, tno:tno} 
 		
-		fetch("/admin/store/addTopping", {
-			method : 'post',
-			headers : {"Content-Type" : "application/json"},
-			body : JSON.stringify(value)
-		}).then(res => res.text()).then(result => console.log(result))
+		const path = "/admin/store/addTopping"
+		
+		service.sendRegister(value,path,csrfTokenValue).then(result => console.log(result))
 		
 		e.target.remove()
 		document.querySelector(".select-topping").innerHTML += "<a href='' class='btn btn-round btn-primary' data-tno="+tno+">"+tname+"</a>"
@@ -443,11 +436,7 @@ document.querySelector("input[name='mimg']").addEventListener("change" , functio
 		console.log(mimg)
 		console.log(JSON.stringify(menuDTO))
 		const path = actionForm.getAttribute("action")
-		fetch(path , {
-			method : 'post',
-			headers : {"Content-Type" : "application/json;"} ,
-			body : JSON.stringify(menuDTO)
-		}).then(res => res.text()).then(result => {
+		service.sendRegister(menuDTO, path, csrfTokenValue).then(result => {
 			$(".modModal").modal("hide")
 			$(".commitModal").modal("show")})
 		

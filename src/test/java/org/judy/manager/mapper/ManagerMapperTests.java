@@ -45,7 +45,7 @@ public class ManagerMapperTests {
 	
 	@Test
 	public void testSelectOne() {
-		log.info(mapper.selectOne("user147"));
+		log.info(mapper.selectOne("user7"));
 	}
 	
 	@Test
@@ -83,13 +83,4 @@ public class ManagerMapperTests {
 		log.info(mapper.selectOne("user147"));
 	}
 	
-	@Test
-	public void tesetUpdateMan() {
-		Manager manager = Manager.builder().mid("kyg")
-				.mpw("1234")
-				.email("asdf@asdf.asd")
-				.phone("01012345678")
-				.build();
-		mapper.updateMan(manager);
-	}
 }

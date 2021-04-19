@@ -79,11 +79,4 @@ public class ManagerServiceTests {
 		service.registerMan(dto);
 	}
 	
-	@Test
-	public void testUpdateMan() {
-		ManagerDTO dto = ManagerDTO.builder().mid("kyg").mpw("123123123").phone("010201929").email("sdjflkdsj@gmail.com")
-				.build();
-		service.updateMan(dto);
-	}
-	
 }

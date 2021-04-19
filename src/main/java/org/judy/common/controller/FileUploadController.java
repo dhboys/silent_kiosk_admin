@@ -2,6 +2,7 @@ package org.judy.common.controller;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
@@ -21,6 +22,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,88 +45,13 @@ public class FileUploadController {
 	private final StoreService storeService;
 
 	private final NoticeService service;
-	
-	@GetMapping("/notice/getFiles")
-	@ResponseBody
-	public ResponseEntity<List<NoticeFileDTO>> getFiles(Integer nno){
-
-		log.info("nno:........."+nno);
-		
-		return new ResponseEntity<>(service.getFile(nno),HttpStatus.OK);
-		
-	}
-	
-	@PostMapping("/notice/delete")
-	public ResponseEntity<String> postDelete(@RequestBody NoticeFileDTO file){
-		
-		log.info("link:"+file);
-		
-		String path = "C:\\upload\\temp\\admin\\notice";
-		
-		String fileName = file.getFileName();
-		
-		String filePath = file.getUploadPath();
-		
-		String uuid = file.getUuid();
-		
-		String getFile = filePath + File.separator + uuid + "_" + fileName;
-		
-		log.info(getFile);
-		
-		File targetFile = new File(path, getFile);
-		
-		log.info(targetFile);
-		
-		
-		targetFile.delete();
-		
-		if(file.isImage()) {
-			
-			String thumbImg = filePath + File.separator + "s_" + uuid + "_" + fileName;
-			
-			File targetThumbFile = new File(path, thumbImg);
-			
-			targetThumbFile.delete();
-			
-		}
-		
-		return new ResponseEntity<String> ("success",HttpStatus.OK);
-	}
-
-   @GetMapping("/notice/view")
-   @ResponseBody
-   public ResponseEntity<byte[]> getView(String link) {
-
-	   log.info("view.....................");
-	   log.info("Link:" + link);
-	   
-      String path = "C:\\upload\\temp\\admin\\notice";
-
-      ResponseEntity<byte[]> result = null;
-
-      try {
-         File targetFile = encoding(link,path);
-         
-         HttpHeaders header = new HttpHeaders();
-
-         header.add("Content-Type", Files.probeContentType(targetFile.toPath()));
-
-         result = new ResponseEntity<byte[]>(FileCopyUtils.copyToByteArray(targetFile), header, HttpStatus.OK);
-
-      } catch (Exception e) {
-         e.printStackTrace();
-      }
-
-      return result;
-   }
-   
 
 	@GetMapping("/manager/view")
 	public ResponseEntity<byte[]> view(String link) {
 
 		String path = "C:\\upload\\temp\\admin\\manager";
 		
-		return imgView(link, path);
+		return imgView(path, link);
 	}
 	
 	@GetMapping("/menu/view")
@@ -132,7 +59,7 @@ public class FileUploadController {
 		log.info("link: "+link);
 		String path = "C:\\upload\\admin\\manager\\MImg\\";
 
-		return imgView(link, path);
+		return imgView(path, link);
 	}
 	
 	@GetMapping("/topping/view")
@@ -140,7 +67,7 @@ public class FileUploadController {
 		log.info("link: "+link);
 		String path = "C:\\upload\\admin\\manager\\tImg\\";
 
-		return imgView(link, path);
+		return imgView(path, link);
 	}
 	
 	@GetMapping("/logo/view")
@@ -148,18 +75,20 @@ public class FileUploadController {
 		log.info("link: "+link);
 		String path = "C:\\upload\\admin\\manager\\logoImg\\";
 		
-		return imgView(link, path);
+		return imgView(path, link);
 	}
-	
 	@GetMapping("/store/Imgview")
 	public ResponseEntity<byte[]> storeView(String link) {
 		log.info("link: "+link);
 		String path = "C:\\upload\\admin\\manager\\storeImg\\";
 		
-		return imgView(link, path);
+		return imgView(path, link);
 	}
+	
+	
 
 	@PostMapping(value = "/manager/upload", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<List<ManagerFileDTO>> postUpload(MultipartFile[] files) {
 
 		String path = "C:\\upload\\temp\\admin\\manager";
@@ -218,6 +147,7 @@ public class FileUploadController {
 	}
 
 	@PostMapping(value = "/manager/doc/upload", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<List<ManagerFileDTO>> postDocUpload(MultipartFile[] files, String value) {
 
 		String path = "C:\\upload\\temp\\admin\\manager";
@@ -313,6 +243,7 @@ public class FileUploadController {
 	// deleteFile
 
 	@PostMapping(value = "/manager/delete")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@ResponseBody
 	public ResponseEntity<String> delFile(@RequestBody String link) {
 
@@ -345,6 +276,7 @@ public class FileUploadController {
 	
 	// storeUpload
 	@PostMapping("/store/upload")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	   public ResponseEntity<List<ManagerFileDTO>> storeUpload(MultipartFile[] uploadFile) {
 
 	      String path = "C:\\upload\\temp\\admin\\manager";
@@ -427,102 +359,201 @@ public class FileUploadController {
 	   }
 	
 	
-
+	
 	// ====================================================================================================================
 	// notice
+	@GetMapping("/notice/thumb")
+	public ResponseEntity<byte[]> getThumb(Integer nno) {
 
-	   @PostMapping("/notice/upload")
-	   public ResponseEntity<List<NoticeFileDTO>> uploadPost(MultipartFile[] uploadFile) {
+		log.info("view.....................");
 
-	      String path = "C:\\upload\\temp\\admin\\notice";
+		String link = service.getThumb(nno).getthumbLink();
 
-	      log.info("upload------------------");
+		String path = "C:\\upload\\admin\\notice";
 
-	      List<NoticeFileDTO> fileList = new ArrayList<>();
+		ResponseEntity<byte[]> result = null;
 
-	      for (MultipartFile multipartFile : uploadFile) {
+		try {
+			File targetFile = encoding(link, path);
 
-	         log.info("---------------------------");
-	         log.info("upload file name: " + multipartFile.getOriginalFilename());
-	         log.info("upload file size: " + multipartFile.getSize());
+			HttpHeaders header = new HttpHeaders();
 
-	         String folderPath = getFolder();
+			header.add("Content-Type", Files.probeContentType(targetFile.toPath()));
 
-	         File uploadPath = new File(path, folderPath);
+			result = new ResponseEntity<byte[]>(FileCopyUtils.copyToByteArray(targetFile), header, HttpStatus.OK);
 
-	         if (uploadPath.exists() == false) {
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-	            uploadPath.mkdirs();
-	         }
+		return result;
+	}
 
-	         UUID uuid = UUID.randomUUID();
+	@GetMapping("/notice/getFiles")
+	@ResponseBody
+	public ResponseEntity<List<NoticeFileDTO>> getFiles(Integer nno) {
 
-	         String fileName = multipartFile.getOriginalFilename();
+		log.info("nno:........." + nno);
 
-	         File saveFile = new File(uploadPath, uuid.toString() + "_" + fileName);
+		return new ResponseEntity<>(service.getFile(nno), HttpStatus.OK);
 
-	         boolean isImage = multipartFile.getContentType().startsWith("image");
+	}
 
-	         try {
+	@PostMapping("/notice/delete")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<String> postDelete(@RequestBody NoticeFileDTO file) {
 
-	            if (isImage) {
-	               File sFile = new File(uploadPath, "s_" + uuid.toString() + "_" + fileName);
-	               FileOutputStream fos = new FileOutputStream(sFile);
-	               Thumbnailator.createThumbnail(multipartFile.getInputStream(), fos, 100, 100);
+		log.info("link:" + file);
 
-	            }
-	            NoticeFileDTO noticeFile = new NoticeFileDTO(folderPath, uuid.toString(), fileName, isImage);
+		String path = "C:\\upload\\temp\\admin\\notice";
 
-	            fileList.add(noticeFile);
+		String fileName = file.getFileName();
 
-	            multipartFile.transferTo(saveFile);
-	         } catch (Exception e) {
-	            e.printStackTrace();
-	         }
+		String filePath = file.getUploadPath();
 
-	      } // end for
+		String uuid = file.getUuid();
 
-	      return new ResponseEntity<>(fileList, HttpStatus.OK);
-	   }
-	   
-	   
+		String getFile = filePath + File.separator + uuid + "_" + fileName;
 
-	   @GetMapping(value = "/notice/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-	   @ResponseBody
-	   public ResponseEntity<Resource> downloadFile(String link) {
+		log.info(getFile);
 
-	      String path = "C:\\upload\\temp\\admin\\notice";
+		File targetFile = new File(path, getFile);
 
-	      String str = "";
+		log.info(targetFile);
 
-	      try {
-	         str = URLDecoder.decode(link, "UTF-8");
-	      } catch (UnsupportedEncodingException e) {
-	         e.printStackTrace();
-	      }
+		targetFile.delete();
 
-	      String fileLink = str.replace("#", ".");
+		if (file.isImage()) {
 
-	      File viewFile = new File(path, fileLink);
+			String thumbImg = filePath + File.separator + "s_" + uuid + "_" + fileName;
 
-	      Resource resource = new FileSystemResource(viewFile);
+			File targetThumbFile = new File(path, thumbImg);
 
-	      String resourceName = resource.getFilename();
+			targetThumbFile.delete();
 
-	      HttpHeaders headers = new HttpHeaders();
-	      try {
-	         headers.add("Content-Disposition",
-	               "attachment; filename=" + new String(resourceName.getBytes("UTF-8"), "ISO-8859-1"));
-	      } catch (UnsupportedEncodingException e) {
-	         e.printStackTrace();
-	      }
+		}
 
-	      return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
-	   }
+		return new ResponseEntity<String>("success", HttpStatus.OK);
+	}
+
+	@GetMapping("/notice/view")
+	@ResponseBody
+	public ResponseEntity<byte[]> getView(String link) {
+
+		log.info("view.....................");
+		log.info("Link:" + link);
+
+		String path = "C:\\upload\\admin\\notice";
+
+		return imgView(path,link);
+	}
+
+	@GetMapping("/notice/preview")
+	@ResponseBody
+	public ResponseEntity<byte[]> getPreview(String link) {
+
+		log.info("view.....................");
+		log.info("Link:" + link);
+
+		String path = "C:\\upload\\temp\\admin\\notice";
+
+		return imgView(path, link);
+	}
+
+	
+
+
+	@PostMapping("/notice/upload")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<List<NoticeFileDTO>> uploadPost(MultipartFile[] uploadFile) {
+
+		String path = "C:\\upload\\temp\\admin\\notice";
+
+		log.info("upload------------------");
+
+		List<NoticeFileDTO> fileList = new ArrayList<>();
+
+		for (MultipartFile multipartFile : uploadFile) {
+
+			log.info("---------------------------");
+			log.info("upload file name: " + multipartFile.getOriginalFilename());
+			log.info("upload file size: " + multipartFile.getSize());
+
+			String folderPath = getFolder();
+
+			File uploadPath = new File(path, folderPath);
+
+			if (uploadPath.exists() == false) {
+
+				uploadPath.mkdirs();
+			}
+
+			UUID uuid = UUID.randomUUID();
+
+			String fileName = multipartFile.getOriginalFilename();
+
+			File saveFile = new File(uploadPath, uuid.toString() + "_" + fileName);
+
+			boolean isImage = multipartFile.getContentType().startsWith("image");
+
+			try {
+
+				if (isImage) {
+					File sFile = new File(uploadPath, "s_" + uuid.toString() + "_" + fileName);
+					FileOutputStream fos = new FileOutputStream(sFile);
+					Thumbnailator.createThumbnail(multipartFile.getInputStream(), fos, 100, 100);
+
+				}
+				NoticeFileDTO noticeFile = new NoticeFileDTO(folderPath, uuid.toString(), fileName, isImage);
+
+				fileList.add(noticeFile);
+
+				multipartFile.transferTo(saveFile);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		} // end for
+
+		return new ResponseEntity<>(fileList, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/notice/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	@ResponseBody
+	public ResponseEntity<Resource> downloadFile(String link) {
+
+		String path = "C:\\upload\\admin\\notice";
+
+		String str = "";
+
+		try {
+			str = URLDecoder.decode(link, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+		String fileLink = str.replace("#", ".");
+
+		File viewFile = new File(path, fileLink);
+
+		Resource resource = new FileSystemResource(viewFile);
+
+		String resourceName = resource.getFilename();
+
+		HttpHeaders headers = new HttpHeaders();
+		try {
+			headers.add("Content-Disposition",
+					"attachment; filename=" + new String(resourceName.getBytes("UTF-8"), "ISO-8859-1"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+		return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
+	}
 
 	private String getFolder() {
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd");
 
 		Date date = new Date();
 
@@ -548,31 +579,22 @@ public class FileUploadController {
 		}
 		return viewFile;
 	}
+	
+	private ResponseEntity<byte[]> imgView(String path,String link) {
 
-	private ResponseEntity<byte[]> imgView(String link, String path){
 		ResponseEntity<byte[]> result = null;
 
-		String realPath = "";
+		File targetFile = encoding(link, path);
 
 		try {
-
-			File targetFile = encoding(link, path);
-
-			log.info("--------------------------------------");
-			log.info(targetFile);
-			log.info("--------------------------------------");
-
 			HttpHeaders header = new HttpHeaders();
-
 			header.add("Content-Type", Files.probeContentType(targetFile.toPath()));
-
-			result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(targetFile), header, HttpStatus.OK);
-
-		} catch (Exception e) {
+			result = new ResponseEntity<byte[]>(FileCopyUtils.copyToByteArray(targetFile), header, HttpStatus.OK);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		return result;
-		
 	}
+
 }

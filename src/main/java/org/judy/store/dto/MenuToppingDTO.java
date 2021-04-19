@@ -1,7 +1,5 @@
 package org.judy.store.dto;
 
-import org.judy.store.domain.MenuTopping;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,12 +1,13 @@
 package org.judy.manager.controller;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
+
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URLDecoder;
+import java.net.http.HttpRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,8 @@ import org.judy.store.dto.StoreDTO;
 import org.judy.store.service.StoreService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,6 +61,7 @@ public class ManagerController {
 	
 	
 	@GetMapping("/list")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public void getList(PageDTO pageDTO, Model model ) {
 //		log.info("getList...............");
 		PageDTO dto = PageDTO.builder().page(pageDTO.getPage()).perSheet(pageDTO.getPerSheet()).type(pageDTO.getType()).keyword(pageDTO.getKeyword()).build();
@@ -73,6 +77,7 @@ public class ManagerController {
 	}
 	
 	@GetMapping("/delList")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public void delList(PageDTO pageDTO, Model model ) {
 //		log.info("getList...............");
 		PageDTO dto = PageDTO.builder().page(pageDTO.getPage()).perSheet(pageDTO.getPerSheet()).type(pageDTO.getType()).keyword(pageDTO.getKeyword()).build();
@@ -88,6 +93,7 @@ public class ManagerController {
 	}
 	
 	@GetMapping("/appList")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public void appList(PageDTO pageDTO, Model model ) {
 //		log.info("getList...............");
 		PageDTO dto = PageDTO.builder().page(pageDTO.getPage()).perSheet(pageDTO.getPerSheet()).type(pageDTO.getType()).keyword(pageDTO.getKeyword()).build();
@@ -103,6 +109,7 @@ public class ManagerController {
 	}
 	
 	@GetMapping("/read")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public void getRead(String mid,  Model model) {
 		
 		ManagerDTO managerDTO = managerService.selectOne(mid);
@@ -116,6 +123,7 @@ public class ManagerController {
 	}
 	
 	@PostMapping("/delete")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<String> deleteMan(@RequestBody String mid) {
 		
 		managerService.enabled(mid);
@@ -125,6 +133,7 @@ public class ManagerController {
 	}
 	
 	@PostMapping("/approval")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<String> approvalMan(@RequestBody String mid){
 		
 		managerService.approval(mid);
@@ -160,6 +169,7 @@ public class ManagerController {
 		return new ResponseEntity<String>("Success" , HttpStatus.OK);
 	}
 	@PostMapping("/modifyMan")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<String> postModify(@RequestBody ManagerDTO managerDTO){
 		
 		managerService.updateMan(managerDTO);
@@ -169,26 +179,9 @@ public class ManagerController {
 	
 	
 	
-	private File encoding(String link, String path) {
-
-		File viewFile = null;
-
-		try {
-			String str = URLDecoder.decode(link, "UTF-8");
-
-			String fileLink = str.replace("#", ".");
-
-			viewFile = new File(path, fileLink);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return viewFile;
-	}
-	
 	private String getFolder() {
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd");
 
 		Date date = new Date();
 

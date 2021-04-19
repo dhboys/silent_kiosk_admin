@@ -117,7 +117,7 @@
 <script type="text/javascript"
 	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a992392fec7fc62c30d19315b7c1a5e1&libraries=services"></script>
 <script>
-
+const csrfTokenValue = "${_csrf.token}"
 const mid = document.querySelector("input[name='mid']").value
 const arr = []
 
@@ -129,12 +129,12 @@ document.querySelector("input[name='logoImg']").addEventListener("change" , func
 	    const files = e.target.files
 	    fd.append("files", files[0])
 	    fd.append("value", e.target.name)
-	    service.sendUpload(fd).then(result => {
+	    service.sendUpload(fd, csrfTokenValue).then(result => {
 	    	console.dir(result[0])
 	    	e.target.setAttribute("data-fileName" , result[0].sfileName)
 	    }) 
 	    
-	    service.sendUploadThumb(fd)
+	    service.sendUploadThumb(fd, csrfTokenValue)
 	   
 } , false)
 
@@ -157,7 +157,7 @@ document.querySelector("input[name='logoImg']").addEventListener("change" , func
 			
 		}
 		
-		service.storeUpload(formdata).then(jsonObj => 
+		service.storeUpload(formdata, csrfTokenValue).then(jsonObj => 
 		
 		 { console.log(jsonObj)
 			for(var i = 0 ; i< jsonObj.length; i++){
@@ -198,7 +198,7 @@ document.querySelector("input[name='logoImg']").addEventListener("change" , func
 	 console.log(obj)
 	
 	
-	 service.sendRegister(obj, "/admin/store/register").then(result => {$(".regModal").modal("show")}) 
+	 service.sendRegister(obj, "/admin/store/register", csrfTokenValue).then(result => {$(".regModal").modal("show")}) 
 	
 	 } , false) 
 

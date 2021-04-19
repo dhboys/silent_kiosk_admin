@@ -18,7 +18,6 @@ public class ManagerFileDTO {
 	private String suuid;
 	private String sfileName;
 	private Integer sno;
-	
 
 	public String getLink() {
 
@@ -38,8 +37,6 @@ public class ManagerFileDTO {
 	}
 
 	public String getThumbLink() {
-
-		
 
 			String fileLinkName = sfileName.replace(".", "#");
 

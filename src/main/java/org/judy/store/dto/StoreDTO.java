@@ -5,10 +5,8 @@ import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 import org.judy.common.util.ManagerFileDTO;
-import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -36,4 +34,5 @@ public class StoreDTO {
 	
 	@NotEmpty(message = "not Empty")
 	private List<ManagerFileDTO> fileDTO;
+	
 }
