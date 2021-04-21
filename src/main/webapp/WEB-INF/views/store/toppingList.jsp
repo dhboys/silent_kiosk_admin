@@ -146,8 +146,7 @@ String sno = request.getParameter("sno");
 											</div>
 											<h5 class="tname card-title">${topping.tname }</h5>
 											<p class="tprice card-category">${topping.tprice }</p>
-											<input class="timg" type="hidden" value=${topping.timg }/>
-
+											<input type="hidden" class="timg" value=${topping.timg }/>
 										</div>
 										<div class="card-footer">
 											<div class="menuBtn stats" data-mno="${topping.tno }">

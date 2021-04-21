@@ -159,7 +159,7 @@ String sno = request.getParameter("sno");
 					<div class="cardHeaderStyle card-header card-header-primary">
 						<div>
 							<h4 class="card-title ">${sname }</h4>
-							<p class="card-category"></p>
+							<p class="card-category">Here is a subtitle for this table</p>
 						</div>
 					</div>
 
@@ -188,8 +188,7 @@ String sno = request.getParameter("sno");
 											<h5 class="menuName card-title">${menu.menuName }</h5>
 											<p class="menuContent card-category">${menu.content }</p>
 											<p class="menuPrice card-category">${menu.mprice }</p>
-											<input class="menuImg" type="hidden" value="${menu.mimg }"/>
-
+											<input type="hidden" class="menuImg" value=${menu.mimg }/>
 										</div>
 										<div class="card-footer">
 											<div class="menuBtn stats" data-mno="${menu.mno }">

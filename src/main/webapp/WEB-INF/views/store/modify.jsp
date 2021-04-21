@@ -202,7 +202,7 @@ document.querySelector("input[name='logoImg']").addEventListener("change" , func
 		event.preventDefault()
 		console.dir(arr)
 		console.log(file)
-		const fileLi = document.querySelector(".delFile"+file.suuid)
+		const fileLi = document.querySelector(".delFile"+file)
 		
 		fileLi.remove()
 		
