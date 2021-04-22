@@ -28,7 +28,7 @@ public class SecurityMapperTests {
 	@Test
 	public void testManager() {
 		
-		log.info(mapper.managerRead("user7"));
+		//log.info(mapper.managerRead("user7"));
 		
 	}
 
