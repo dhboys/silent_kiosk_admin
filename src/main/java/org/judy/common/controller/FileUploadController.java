@@ -88,7 +88,6 @@ public class FileUploadController {
 	
 
 	@PostMapping(value = "/manager/upload", produces = { MediaType.APPLICATION_JSON_VALUE })
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<List<ManagerFileDTO>> postUpload(MultipartFile[] files) {
 
 		String path = "C:\\upload\\temp\\admin\\manager";
@@ -147,7 +146,6 @@ public class FileUploadController {
 	}
 
 	@PostMapping(value = "/manager/doc/upload", produces = { MediaType.APPLICATION_JSON_VALUE })
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<List<ManagerFileDTO>> postDocUpload(MultipartFile[] files, String value) {
 
 		String path = "C:\\upload\\temp\\admin\\manager";
@@ -243,7 +241,6 @@ public class FileUploadController {
 	// deleteFile
 
 	@PostMapping(value = "/manager/delete")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@ResponseBody
 	public ResponseEntity<String> delFile(@RequestBody String link) {
 
@@ -276,7 +273,6 @@ public class FileUploadController {
 	
 	// storeUpload
 	@PostMapping("/store/upload")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	   public ResponseEntity<List<ManagerFileDTO>> storeUpload(MultipartFile[] uploadFile) {
 
 	      String path = "C:\\upload\\temp\\admin\\manager";

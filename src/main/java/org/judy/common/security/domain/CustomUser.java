@@ -23,11 +23,7 @@ public class CustomUser extends User {
 		this.member = vo;
 	}
 
-	public CustomUser(Manager manager) {
-		super(manager.getMid(), manager.getMpw(),  manager.getAuthList().stream().map(auth -> new SimpleGrantedAuthority(auth.getAuth())).collect(Collectors.toList()));
-
-		this.manager = manager;
-	}
+	
 	
 	
 

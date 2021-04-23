@@ -15,18 +15,15 @@
 		<result property="sno" column="mname" />
 		<collection property="authList" resultMap="authMap"></collection>
 	</resultMap>
-	<resultMap type="org.judy.store.domain.Store" id="store">
-		<result property="mid" column="mid" />
-		<result property="sno" column="sno" />
-	</resultMap>
 
-	<select id="read" resultType="org.judy.common.security.domain.MemberVO">
-		select ta.mid , mpw ,sno ,mname , ta.auth from 
-		(select tm.mid mid , tm.mpw mpw , ts.sno sno ,tm.email mname from tbl_manager tm left join tbl_store ts on tm.mid = ts.mid where ts.mid = #{mid} and enable = 1
+	<select id="read" resultMap="memberMap">
+		select tl.mid , mpw , mname , ta.auth from 
+		(select tm.mid mid , tm.mpw mpw , ts.sno mname from tbl_manager tm left join tbl_store ts on tm.mid = ts.mid where tm.mid = #{mid} and approval = 1
 		union all
-		select amid mid, ampw mpw, '0' sno, amname mname from tbl_admin where amid = #{mid}
+		select amid mid, ampw mpw, amname mname from tbl_admin where amid = #{mid}
 		union all
-		select adid mid, adpw mpw, '0' sno, '광고주' mname from tbl_adv where adid = #{mid} ) tl left join tbl_auth ta on tl.mid = ta.mid
+		select adid mid, adpw mpw, '광고주' mname from tbl_adv where adid = #{mid} ) tl left join tbl_auth ta on tl.mid = ta.mid 
+		group by mid
 	</select>
 
 </mapper>

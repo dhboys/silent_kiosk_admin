@@ -20,7 +20,7 @@ public class SecurityMapperTests {
 	@Test
 	public void testMember() {
 		
-		log.info(mapper.read("test1"));
+		log.info(mapper.read("kyg"));
 		
 	}
 	

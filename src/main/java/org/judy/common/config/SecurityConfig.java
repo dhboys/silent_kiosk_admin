@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 
 import org.judy.common.security.CustomLoginSuccessHandler;
-import org.judy.common.security.service.CustomUserDetailsServiceImpl;
+import org.judy.common.security.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -54,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public UserDetailsService customUserService() {
-		return new CustomUserDetailsServiceImpl();
+		return new UserDetailsServiceImpl();
 	}
 
 	/*
@@ -79,28 +79,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-//      http.authorizeRequests()
-//      .antMatchers("/sample/all").permitAll()
-//      .antMatchers("/notice/list").access("hasRole('ROLE_ADMIN')")
-//      .antMatchers("/notice/list").access("hasRole('ROLE_MEMBER')");
 
-//      RequestMatcher csrfRequestMatcher = new RequestMatcher() {
-//
-//            private RegexRequestMatcher requestMatcher =
-//                new RegexRequestMatcher("/admin/store/jusoPopup", null);
-//
-//            @Override
-//            public boolean matches(HttpServletRequest request) {
-//
-//                if(requestMatcher.matches(request)) {
-//                    return true;
-//                }
-//                return false;
-//            }
-//
-//          }; // new RequestMatcher
 
-		http.formLogin().loginPage("/sample/customLogin").loginProcessingUrl("/login")
+		http.formLogin().loginPage("/account/customLogin").loginProcessingUrl("/login")
 				.successHandler(loginSuccessHandler());
 
 		http.logout().logoutUrl("/customLogout").invalidateHttpSession(true).deleteCookies("remember-me",

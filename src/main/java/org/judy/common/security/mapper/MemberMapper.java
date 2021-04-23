@@ -6,7 +6,7 @@ import org.judy.common.security.domain.MemberVO;
 
 public interface MemberMapper {
 	
-	List<MemberVO> read(String mid);
+	MemberVO read(String mid);
 	
 	
 
